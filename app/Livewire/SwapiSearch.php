@@ -64,22 +64,12 @@ class SwapiSearch extends Component
                         ->get($this->resources[$this->category]);
 
             // swapi.tech puede usar "result" o "results"
-            // Detectar si es FILMS
-if ($this->category === 'films') {
-    $items = $response->json('result') ?? [];
-} else {
-    $items = $response->json('results') ?? [];
-}
-
+            $items = $resp->json('result') ?? $resp->json('results') ?? [];
 
             // 2) Filtrar localmente (name o title)
             $matches = [];
             foreach ($items as $it) {
-                if ($this->category === 'films') {
-    $name = $item['properties']['title'] ?? '';
-} else {
-    $name = $item['name'] ?? '';
-}
+                $name = $it['name'] ?? $it['title'] ?? '';
                 if ($name !== '' && stripos($name, $q) !== false) {
                     $matches[] = $it;
                 }
@@ -114,6 +104,3 @@ if ($this->category === 'films') {
         return view('livewire.swapi-search');
     }
 }
-
-
-
