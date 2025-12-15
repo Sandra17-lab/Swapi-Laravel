@@ -1,39 +1,46 @@
+# ---------- Base ----------
 FROM php:8.2-cli
 
-# Dependencias del sistema
+# ---------- System deps ----------
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
     curl \
-    libzip-dev \
-    && docker-php-ext-install zip
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    nodejs \
+    npm
 
-# Instalar Node.js (para Vite)
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
-    && apt-get install -y nodejs
-
-# Instalar Composer
+# ---------- Composer ----------
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 
-# Copiar proyecto
+# ---------- Copy files ----------
 COPY . .
 
-# Instalar dependencias PHP
+# ---------- Install PHP deps ----------
 RUN composer install --no-dev --optimize-autoloader
 
-# Instalar dependencias JS y compilar Vite
+# ---------- Install JS deps + build ----------
 RUN npm install
 RUN npm run build
 
+# ---------- Permissions ----------
+RUN chmod -R 775 storage bootstrap/cache
+
+# ---------- Clear cache ----------
+RUN php artisan config:clear
+RUN php artisan view:clear
+RUN php artisan cache:clear
+
+# ---------- Expose port ----------
 EXPOSE 8080
 
-CMD ["/bin/sh", "-c", "php -S 0.0.0.0:$PORT -t public"]
-
-RUN php artisan config:clear
-RUN php artisan cache:clear
-RUN php artisan view:clear
+# ---------- Start ----------
+CMD php -S 0.0.0.0:${PORT:-8080} -t public
 
 
 
