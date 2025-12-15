@@ -1,22 +1,28 @@
-FROM php:8.3-fpm
+FROM php:8.1-cli
 
+# Instalar dependencias del sistema
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
-    curl \
-    libonig-dev \
-    libxml2-dev \
     libzip-dev \
-    && docker-php-ext-install pdo pdo_mysql zip
+    && docker-php-ext-install zip
 
-COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
+# Instalar Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-WORKDIR /var/www/html
+# Directorio de trabajo
+WORKDIR /app
 
+# Copiar archivos del proyecto
 COPY . .
 
-RUN composer install
+# Instalar dependencias de Laravel
+RUN composer install --no-dev --optimize-autoloader
 
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+# Exponer el puerto (Railway usa $PORT)
+EXPOSE 8080
+
+# Comando de arranque (ESTO ES LO CLAVE)
+CMD php -S 0.0.0.0:$PORT -t public
+
 
