@@ -26,6 +26,7 @@
         {{-- indicador de carga --}}
         <div wire:loading class="flex items-center px-3">
             <svg class="animate-spin h-5 w-5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none" opacity="0.25"/></svg>
+            
         </div>
     </div>
 
@@ -74,6 +75,8 @@
                             @foreach (['films','starships','vehicles','people','residents','characters','planets','species','pilots'] as $arr)
                                 @if(!empty($p[$arr]))
                                     <p><strong>{{ ucfirst($arr) }}:</strong> {{ is_array($p[$arr]) ? count($p[$arr]).' item(s)' : $p[$arr] }}</p>
+                                    <p>Conectado a: https://www.swapi.tech</p>
+
                                 @endif
                             @endforeach
                         </div>
