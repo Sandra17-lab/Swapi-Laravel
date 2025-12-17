@@ -7,9 +7,13 @@ use Symfony\Component\Http\Request;
 
 class TrustProxies extends Middleware
 {
-protected $proxies = '*';
+    protected $proxies = null;
 
-protected $headers = Request::HEADER_X_FORWARDED_ALL;
+    protected $headers = Request::HEADER_X_FORWARDED_FOR
+        | Request::HEADER_X_FORWARDED_HOST
+        | Request::HEADER_X_FORWARDED_PORT
+        | Request::HEADER_X_FORWARDED_PROTO;
 }
+
 
 
