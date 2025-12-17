@@ -39,7 +39,9 @@
         </div>
 
         @stack('modals')
-
-        @livewireScripts
+<script src="{{ secure_asset('vendor/livewire/livewire.js') }}"
+        data-csrf="{{ csrf_token() }}"
+        data-update-uri="/livewire/update"
+        defer></script>
     </body>
 </html>

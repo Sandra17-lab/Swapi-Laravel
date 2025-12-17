@@ -28,8 +28,9 @@ return [
     | Asset URL  ✅ (ESTO ES LO CLAVE)
     |--------------------------------------------------------------------------
     */
-    'asset_url' => env('LIVEWIRE_ASSET_URL', null),
 
+    'asset_url' => env('LIVEWIRE_ASSET_URL', null),
+    
     /*
     |--------------------------------------------------------------------------
     | Lazy Loading Placeholder
@@ -75,7 +76,7 @@ return [
     | Auto-inject Frontend Assets
     |--------------------------------------------------------------------------
     */
-    'inject_assets' => true,
+    'inject_assets' => false,
 
     /*
     |--------------------------------------------------------------------------
